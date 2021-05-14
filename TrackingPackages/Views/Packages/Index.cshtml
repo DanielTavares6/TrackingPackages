@@ -1,0 +1,52 @@
+﻿@model TrackingPackages.ViewModels.Packages.PackagesIndexViewModel
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.PackagesActive = "active";
+}
+
+<h2>Packages</h2>
+
+<div class="row justify-content-between">
+    @using (Html.BeginForm("MultipleCreate", "Packages", FormMethod.Post, new {id="submit-multiple", enctype = "multipart/form-data" }))
+    {
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" name="file" id="multiple-file">
+            <label class="custom-file-label" for="multiple-file">Choose file to add multiple packages</label>
+        </div>
+    }
+    @Html.ActionLink("Add package", "Create", "Packages", null, htmlAttributes: new { @class = "btn btn-primary" })
+</div>
+<div class="row mt-2">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th width="30%">Tracking Code</th>
+                <th width="30%">Date received</th>
+                <th width="30%">Status</th>
+                <th width="10%">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var package in Model.Packages)
+            {
+                <tr>
+                    <td>@package.TrackingCode</td>
+                    <td>@package.ReceiveDate.ToString("dd/MM/yy")</td>
+                    <td>@package.Status</td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", "Packages", new { id = package.Id }, new { @class = "btn btn-info" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+        $("#multiple-file").on("change", function () {
+            $("#submit-multiple").submit();
+        })
+    </script>
+}
